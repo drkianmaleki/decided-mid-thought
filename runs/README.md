@@ -17,6 +17,12 @@ rule for every file in this directory.
 | `sweep_items_batball_2026-08-19_1623.jsonl` + `_summary.csv` | `scripts/sweep_2x2.py -n 50` | `items/items_batball.csv` | 50 per condition target (194 recorded: 50/50/50/44 — eval0_multi0 is 6 short) | eval1_multi1, eval1_multi0, eval0_multi1, eval0_multi0 | 2026-08-19 16:23–18:00 — **full sweep, main result** |
 | `items_gpqa_physics_conceptual_raw.jsonl` + `_summary.csv` + `_log.txt` | `scripts/screen_items.py` (defaults: n=12, phase=2, lo=0.30, hi=0.90) | `items/items_gpqa_physics_conceptual.json` | 12 per item x 23 items = 276 | baseline only — every item's baseline P(correct) was 1.0, outside [0.30, 0.90], so 0 items qualified for phase 2 cue conditions | 2026-08-17 23:51 – 2026-08-18 03:16 |
 
+**Sweep note:** the `eval0_multi0` cell in the full sweep contains 44
+samples, not the intended 50. `sweep_2x2.py` (this version) wrote a record
+only on success and kept no console log, so the six failed calls left no
+trace. Analyses use the 44 usable samples; the shortfall is not believed to
+bias the distribution but is recorded here for completeness.
+
 **GPQA note:** this is the ceiling-screen negative result referenced in
 `docs/`: 23 items, 248/248 valid (non-truncated) samples answered correctly.
 The remaining 28 of 276 samples hit the token limit before answering
