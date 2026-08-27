@@ -7,7 +7,8 @@ verbatim — verified by mid-sentence continuation + inline </think>. See plan a
 Design (docs/plan_amendment.md, Amendment 1 — commit BEFORE running):
   Source: runs/sweep_items_batball_2026-08-19_1623.jsonl  (frozen; never modified)
   E-trace s0819_eval0multi0_036: cuts after sentences 60,61,62,63,64,65
-  C-trace s0819_eval0multi0_004: cuts after sentences 58,59,60,61,62,63,64,67,68,69
+  C-trace s0819_eval0multi0_004: cuts after sentences 15,29,44 (Amendment 2 bisection
+  of the s0-s58 span) + 58,59,60,61,62,63,64,67,68,69
   Shared cut-0 (empty prefix, open <think>), run FIRST as harness gate:
   |P(E) - 39/44| <= 0.15 or the run aborts.
   n = 25 per prefix, temperature 1.0. Prefix = RAW trace text (original formatting)
@@ -29,14 +30,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_URL = "https://api.deepinfra.com/v1/openai"
-MODEL = None            # resolved from the DeepInfra catalog at start; pin here once known
+MODEL = "Qwen/Qwen3.6-27B"   # pinned 2026-08-26 (catalog-resolved unambiguously on 08-25)
 SOURCE = Path("runs/sweep_items_batball_2026-08-19_1623.jsonl")
 RUNTAG = "rs0823"
 TPL = "<|im_start|>user\n{p}<|im_end|>\n<|im_start|>assistant\n<think>\n{pre}"
 
 DESIGN = {
     "e036": ("s0819_eval0multi0_036", [60, 61, 62, 63, 64, 65]),
-    "c004": ("s0819_eval0multi0_004", [58, 59, 60, 61, 62, 63, 64, 67, 68, 69]),
+    "c004": ("s0819_eval0multi0_004", [15, 29, 44, 58, 59, 60, 61, 62, 63, 64, 67, 68, 69]),  # 15/29/44: Amendment 2 bisection
 }
 N_PER_PREFIX = 25
 CUT0_BASELINE_PE = 39 / 44

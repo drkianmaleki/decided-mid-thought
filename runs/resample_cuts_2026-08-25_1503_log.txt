@@ -73,3 +73,22 @@
 [19:44:21] ACCOUNT rs0823_c004_cut068: attempted=25 succeeded=25 err=0
 [19:44:21] ACCOUNT rs0823_c004_cut069: attempted=25 succeeded=25 err=0
 [19:44:21] DONE cost=$8.31; prefixes short of n=25: 1
+[22:46:37] CUT-0 GATE: P(E)=0.800 vs baseline 0.886 (±0.15) -> PASS  [{'E': 20, 'A': 1, 'C': 3, '?': 1}]
+[22:50:58] ACCOUNT rs0823_cut000: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut060: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut061: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut062: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut063: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut064: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_e036_cut065: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut058: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut059: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut060: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut061: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut062: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut063: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut064: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut067: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut068: attempted=25 succeeded=25 err=0
+[22:50:58] ACCOUNT rs0823_c004_cut069: attempted=25 succeeded=25 err=0
+[22:50:58] DONE cost=$0.09; prefixes short of n=25: 0
