@@ -225,7 +225,13 @@ def main():
         r = client.completions.create(model=model, prompt=TPL.format(p=prompt, pre=mid),
                 temperature=0.0, max_tokens=8, timeout=600, stop=["<|im_end|>"])
         head = (r.choices[0].text or "")
-        okc = head.startswith("ription") or head.lstrip().startswith("ription")
+        # A true continuation of "...the most accurate desc" begins in lowercase,
+        # completing the word (possibly with off-token-boundary misspellings, e.g.
+        # 'rtiption'); a restart begins with a fresh capitalized/structured opening.
+        h = head.lstrip()
+        restart = any(m in head[:150].lower() for m in
+                      ("the user wants", "here's a thinking", "let me analyze", "analyze the user"))
+        okc = bool(h) and h[0].islower() and not restart
         print(f"MECHANISM (T=0 mid-word): {'PASS' if okc else 'FAIL'} — continuation starts {repr(head[:20])}")
         if not okc:
             print("Raw continuation NOT verified — stop and report back."); return

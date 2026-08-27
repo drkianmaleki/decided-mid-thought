@@ -1,0 +1,75 @@
+[15:22:31] NOCLOSE rs0823_cut000_015: finish=length len=59501
+[15:23:08] NOCLOSE rs0823_cut000_017: finish=length len=56082
+[15:24:50] CUT-0 GATE: P(E)=0.800 vs baseline 0.886 (±0.15) -> PASS  [{'E': 20, 'A': 1, 'C': 3, '?': 1}]
+[16:43:42] NOCLOSE rs0823_c004_cut058_001: finish=length len=54108
+[16:45:42] NOCLOSE rs0823_c004_cut058_004: finish=length len=57886
+[16:49:40] NOCLOSE rs0823_c004_cut058_008: finish=length len=54669
+[16:51:04] NOCLOSE rs0823_c004_cut058_010: finish=length len=62176
+[16:53:01] NOCLOSE rs0823_c004_cut058_012: finish=length len=56788
+[16:56:47] NOCLOSE rs0823_c004_cut058_014: finish=length len=58745
+[17:00:04] NOCLOSE rs0823_c004_cut058_017: finish=length len=54567
+[17:01:44] NOCLOSE rs0823_c004_cut058_018: finish=length len=57990
+[17:03:19] NOCLOSE rs0823_c004_cut058_019: finish=length len=57320
+[17:11:08] NOCLOSE rs0823_c004_cut058_024: finish=length len=55239
+[17:21:51] NOCLOSE rs0823_c004_cut059_012: finish=length len=56279
+[17:23:30] NOCLOSE rs0823_c004_cut059_014: finish=length len=61409
+[17:24:14] NOCLOSE rs0823_c004_cut059_015: finish=length len=58728
+[17:26:11] NOCLOSE rs0823_c004_cut059_016: finish=length len=57654
+[17:26:37] NOCLOSE rs0823_c004_cut059_017: finish=length len=54812
+[17:28:15] NOCLOSE rs0823_c004_cut059_018: finish=length len=57108
+[17:31:38] NOCLOSE rs0823_c004_cut059_021: finish=length len=56169
+[17:33:51] NOCLOSE rs0823_c004_cut059_023: finish=length len=56939
+[17:34:06] NOCLOSE rs0823_c004_cut059_024: finish=length len=58012
+[17:46:41] NOCLOSE rs0823_c004_cut060_018: finish=length len=56485
+[17:49:55] NOCLOSE rs0823_c004_cut060_022: finish=length len=62419
+[17:57:14] NOCLOSE rs0823_c004_cut061_007: finish=length len=58149
+[18:07:08] NOCLOSE rs0823_c004_cut061_019: finish=length len=55665
+[18:10:13] NOCLOSE rs0823_c004_cut061_024: finish=length len=62999
+[18:25:20] NOCLOSE rs0823_c004_cut063_001: finish=length len=55806
+[18:34:44] NOCLOSE rs0823_c004_cut063_020: finish=length len=56584
+[18:43:41] NOCLOSE rs0823_c004_cut064_011: finish=length len=57140
+[18:44:18] NOCLOSE rs0823_c004_cut064_013: finish=length len=57414
+[18:48:37] NOCLOSE rs0823_c004_cut064_020: finish=length len=57742
+[18:49:59] NOCLOSE rs0823_c004_cut064_023: finish=length len=56794
+[19:01:08] RETRY rs0823_c004_cut067_009 attempt 1: Error code: 500 - {'error': {'message': 'inference error', 'type': 'api_error', 'param': None, 'code': None}}
+[19:03:09] RETRY rs0823_c004_cut067_014 attempt 1: Error code: 500 - {'error': {'message': 'inference error', 'type': 'api_error', 'param': None, 'code': None}}
+[19:03:09] RETRY rs0823_c004_cut067_009 attempt 2: Error code: 500 - {'error': {'message': 'inference error', 'type': 'api_error', 'param': None, 'code': None}}
+[19:03:09] RETRY rs0823_c004_cut067_013 attempt 1: Error code: 500 - {'error': {'message': 'inference error', 'type': 'api_error', 'param': None, 'code': None}}
+[19:03:10] RETRY rs0823_c004_cut067_015 attempt 1: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:25] RETRY rs0823_c004_cut067_013 attempt 2: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:26] RETRY rs0823_c004_cut067_014 attempt 2: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:26] RETRY rs0823_c004_cut067_015 attempt 2: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:41] RETRY rs0823_c004_cut067_009 attempt 3: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:57] RETRY rs0823_c004_cut067_013 attempt 3: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:58] RETRY rs0823_c004_cut067_014 attempt 3: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:03:58] RETRY rs0823_c004_cut067_015 attempt 3: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:04:27] RETRY rs0823_c004_cut067_009 attempt 4: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:04:44] RETRY rs0823_c004_cut067_013 attempt 4: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:04:44] RETRY rs0823_c004_cut067_014 attempt 4: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:04:44] RETRY rs0823_c004_cut067_015 attempt 4: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:05:29] RETRY rs0823_c004_cut067_009 attempt 5: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:05:45] RETRY rs0823_c004_cut067_013 attempt 5: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:05:45] RETRY rs0823_c004_cut067_014 attempt 5: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:05:46] RETRY rs0823_c004_cut067_015 attempt 5: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:06:44] FAIL rs0823_c004_cut067_009: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:07:00] FAIL rs0823_c004_cut067_013: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:07:00] FAIL rs0823_c004_cut067_014: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:07:01] FAIL rs0823_c004_cut067_015: Error code: 429 - {'error': {'message': 'Model busy, retry later', 'type': 'invalid_request_error', 'param': None, 'code
+[19:44:21] ACCOUNT rs0823_cut000: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut060: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut061: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut062: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut063: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut064: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_e036_cut065: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut058: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut059: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut060: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut061: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut062: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut063: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut064: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut067: attempted=25 succeeded=21 err=4
+[19:44:21] ACCOUNT rs0823_c004_cut068: attempted=25 succeeded=25 err=0
+[19:44:21] ACCOUNT rs0823_c004_cut069: attempted=25 succeeded=25 err=0
+[19:44:21] DONE cost=$8.31; prefixes short of n=25: 1
