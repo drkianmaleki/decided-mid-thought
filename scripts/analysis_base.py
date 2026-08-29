@@ -1,41 +1,81 @@
+"""
+analysis_base.py — independent re-derivation of the 08/19 sweep numbers (A1).
 
+The sweep is four experiments in one file: each record's "condition" labels its
+2x2 cell (eval sentence on/off x multi/single select). Registered quantities are
+per cell; the pooled table is kept as a secondary view.
+
+Conventions:
+- "C-involving" uses CONTAINMENT: any letters tuple containing "C" counts,
+  so ("C","E") counts. This is the convention the registered numbers
+  (C-involving 25/194; eval effect 12/48 -> 5/50) were defined with.
+  Exact-match C is also reported as a stricter secondary count.
+- E-only = letters == ("E",) exactly.
+- Unparsed (letters == ()) kept in denominators, reported as counts.
+
+Outputs (repo root):
+  baseline_summary        — pooled letters distribution over all 194 records
+  baseline_cells_summary  — per-cell counts + derived registered quantities
+"""
 import pandas as pd
-import matplotlib.pyplot as plt
 
-TARGET_KEYS = ["condition", "letters", "sample" ]
-SHOW_PLOTS = False
+TARGET_KEYS = ["condition", "letters", "sample"]
 PRINT_Q = True
 
 def printer(*item):
     if PRINT_Q:
         print(*item)
-    
+
 df_raw = pd.read_json("runs/sweep_items_batball_2026-08-19_1623.jsonl", lines=True)
-
-df = df_raw[df_raw.columns.intersection(TARGET_KEYS)]
-
-
-
+df = df_raw[df_raw.columns.intersection(TARGET_KEYS)].copy()
 df["letters"] = df["letters"].apply(tuple)
 
-df_count = df.groupby("condition")["letters"].value_counts()
+# ---------------- sanity: cell sizes ----------------
+print("*" * 50)
+sizes = df.groupby("condition").size()
+print(sizes.to_string())
+expected = {"eval0_multi0": 44, "eval0_multi1": 50,
+            "eval1_multi0": 50, "eval1_multi1": 50}
+ok = all(sizes.get(k, 0) == v for k, v in expected.items()) and len(df) == 194
+print(f"Sanity check: {'pass' if ok else 'NOT pass'} "
+      f"(total {len(df)}; eval0_multi0 short by 6 lost samples, by design of the record)")
+print("*" * 50)
 
-printer(df_count)
+# ---------------- per-cell distributions (the registered view) ----------------
+df_cells = (df.groupby("condition")["letters"]
+              .value_counts().reset_index(name="count"))
+printer(df_cells.to_string())
 
-baseline_summary = []
+# derived registered quantities
+rows = []
+for cond, g in df.groupby("condition"):
+    n = len(g)
+    c_inv = g["letters"].apply(lambda t: "C" in t).sum()      # containment
+    c_exact = (g["letters"] == ("C",)).sum()
+    e_only = (g["letters"] == ("E",)).sum()
+    unparsed = (g["letters"] == ()).sum()
+    rows.append([cond, n, int(e_only), int(c_inv), int(c_exact), int(unparsed),
+                 float(e_only / n), float(c_inv / n)])
+cells = pd.DataFrame(rows, columns=["condition", "n", "E_only", "C_involving",
+                                    "C_exact", "unparsed", "P_E_only", "P_C_involving"])
+print(cells.to_string(index=False))
+cells.to_csv("baseline_cells_summary", index=False)
 
+total_c_involving = int(df["letters"].apply(lambda t: "C" in t).sum())
+print(f"C-involving total: {total_c_involving}/194")
+m0 = df[df["condition"] == "eval0_multi1"]
+m1 = df[df["condition"] == "eval1_multi1"]
+print("eval effect (multi cells, C-involving over parsed):",
+      f"{int(m0['letters'].apply(lambda t: 'C' in t).sum())}/"
+      f"{int((m0['letters'] != ()).sum())} (eval off)  vs  "
+      f"{int(m1['letters'].apply(lambda t: 'C' in t).sum())}/"
+      f"{int((m1['letters'] != ()).sum())} (eval on)")
+
+# ---------------- pooled view (secondary) ----------------
 df_counts = df["letters"].value_counts()
-print(df_counts)
-
-total_count = len(df)
-
-
-for val , count in df_counts.items():
-    baseline_summary.append([f'P{val} = ', float(count/total_count)])
-
-print(baseline_summary)
-
-
-baseline_summary = pd.DataFrame(baseline_summary)
-print(baseline_summary)
-baseline_summary.to_csv("baseline_summary", index = False)
+printer(df_counts.to_string())
+baseline_summary = pd.DataFrame(
+    [[f"P{val}", float(count / len(df))] for val, count in df_counts.items()],
+    columns=["letters", "probability"])
+print(baseline_summary.to_csv(index=False))
+baseline_summary.to_csv("baseline_summary", index=False)

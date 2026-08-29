@@ -85,3 +85,14 @@ is the final extracted answer text.
 with `n_valid`, `p_correct`, `p_cued`, `top_wrong`, `tally` (JSON-encoded
 answer-letter counts), and `candidate` (whether the item qualified for
 phase 2).
+
+
+## resample_cuts runs (2026-08-25)
+resample_cuts_2026-08-25_1323.*  smoke via OpenRouter chat-prefill (v1 harness), 3 eye-check records, seq=900;
+                                 continuations restart — the failure that forced the DeepInfra-direct switch.
+                                 Not used in any analysis.
+resample_cuts_2026-08-25_1440_prefixes.json  aborted v2 smoke: T=0 mechanism check failed (strict spelling
+                                 assertion, later loosened); no records generated.
+resample_cuts_2026-08-25_1457.*  passing v2 smoke on DeepInfra direct, 3 eye-check records, seq=900.
+                                 Not used in any analysis.
+resample_cuts_2026-08-25_1503.*  THE analysis run: 20 prefixes x 25 = 500 records; gate, log, summary.

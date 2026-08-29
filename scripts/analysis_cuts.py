@@ -1,145 +1,143 @@
+"""
+analysis_cuts.py — independent re-derivation of the resampling numbers (A1).
 
+Reads the raw resampling records and reconstructs, per prefix, the answer
+distribution and the headline rates. Written from scratch against the raw jsonl;
+does not import or reuse any tabulation code from the run scripts.
+
+Conventions (stated once, used everywhere):
+- P(C) counts letters == ("C",) exactly. On THIS file that equals the
+  "C-involving" containment convention because no ("C","E") draw exists among
+  the 500 records (checked below); the sweep file is different — see
+  analysis_base.py.
+- P(E) counts letters == ("E",) exactly: ("D","E") does not count as settling on E.
+- Unparsed draws (letters == ()) stay in every denominator and are reported as
+  counts ("None"); readers can renormalize from the full tables.
+
+Outputs (repo root):
+  probability_summary          — baseline + P(C|cut), P(E|cut) table
+  plots (if SAVE_PLOTS): plot_cuts_c004.png, plot_cuts_e036.png, plot_cut0_pie.png
+"""
 import pandas as pd
 import matplotlib.pyplot as plt
 
-TARGET_KEYS = ["id","prefix_id", "seq", "cut" ,"trace_arm" , "letters"]
-SHOW_PLOTS = False
-PRINT_Q = False
+TARGET_KEYS = ["id", "prefix_id", "seq", "cut", "trace_arm", "letters"]
+SHOW_PLOTS = False      # interactive windows
+SAVE_PLOTS = True       # write PNGs next to the summaries
+PRINT_Q = False         # verbose intermediate printing
 
 def printer(*item):
     if PRINT_Q:
         print(*item)
-    
+
 df_raw = pd.read_json("runs/resample_cuts_2026-08-25_1503.jsonl", lines=True)
-
-df = df_raw[df_raw.columns.intersection(TARGET_KEYS)]
-
-
-
-print("*"*50)
-print("*"*50)
-counts = df.groupby("prefix_id").size()
-if counts.eq(25).all():
-    print("Sanity check: pass")
-else:
-    print("Sanity check: NOT pass. The total count of each run is expected to be 25.")
-print("*"*50)
-print("*"*50)
-
-
+df = df_raw[df_raw.columns.intersection(TARGET_KEYS)].copy()
 df["letters"] = df["letters"].apply(tuple)
 
+# ---------------- sanity checks: the design invariant ----------------
+print("*" * 50)
+counts = df.groupby("prefix_id").size()
+ok_sizes = counts.eq(25).all()
+ok_groups = len(counts) == 20
+no_ce = (df["letters"] != ("C", "E")).all()   # justifies exact-match == containment here
+if ok_sizes and ok_groups:
+    print(f"Sanity check: pass ({len(counts)} prefixes x 25 draws)")
+else:
+    print(f"Sanity check: NOT pass. groups={len(counts)} (expect 20); "
+          f"sizes: {sorted(counts.unique())} (expect [25])")
+print(f"('C','E') draws present: {'no' if no_ce else 'YES — containment differs from exact match!'}")
+print("*" * 50)
 
-df_trace_cut = df.groupby(["trace_arm","cut"])["letters"].value_counts().reset_index(name = "count")
-print(df_trace_cut)
+# ---------------- full per-prefix answer distributions ----------------
+df_trace_cut = (df.groupby(["trace_arm", "cut"])["letters"]
+                  .value_counts().reset_index(name="count"))
+print(df_trace_cut.to_string())
 
-total_shared = (df["trace_arm"] == "shared").sum()
-total_shared_C = ((df["trace_arm"] == "shared") & (df["letters"] == ("C",))).sum()
-total_shared_E = ((df["trace_arm"] == "shared") & (df["letters"] == ("E",))).sum()
-total_shared_other = ((df["trace_arm"] == "shared") & (df["letters"] != ("E",))& (df["letters"] != ("C",))).sum()
-
-P_C_baseline = total_shared_C / total_shared
-P_E_baseline = total_shared_E / total_shared
-P_other_baseline = total_shared_other / total_shared
-
-
+# ---------------- headline rates ----------------
 summary_table = []
-summary_table.append(["base line of C trace", float(P_C_baseline)])
-summary_table.append(["base line of E trace", float(P_E_baseline)])
-summary_table.append(["base line of other trace", float(P_other_baseline)])
 
+shared = df[df["trace_arm"] == "shared"]
+n_shared = len(shared)
+summary_table.append(["P(C) at cut-0 (shared baseline)",
+                      float((shared["letters"] == ("C",)).sum() / n_shared)])
+summary_table.append(["P(E) at cut-0 (shared baseline)",
+                      float((shared["letters"] == ("E",)).sum() / n_shared)])
+summary_table.append(["P(other or None) at cut-0",
+                      float(((shared["letters"] != ("C",)) &
+                             (shared["letters"] != ("E",))).sum() / n_shared)])
 
-printer("-"*50)
-printer("-"*50)
-printer("-"*50)
-printer("baseline")
-printer(P_C_baseline,P_E_baseline,P_other_baseline)
-printer("-"*50)
-printer("branches")
-all_C_cut = df.loc[df["trace_arm"] == "c004", "cut"].unique()
-all_E_cut = df.loc[df["trace_arm"] == "e036", "cut"].unique()
+for cut in sorted(df.loc[df["trace_arm"] == "c004", "cut"].unique()):
+    mask = (df["trace_arm"] == "c004") & (df["cut"] == cut)
+    total_occurrence = mask.sum()
+    c_occurrence = (mask & (df["letters"] == ("C",))).sum()
+    printer("cut", cut, "C =", c_occurrence, "/", total_occurrence)
+    summary_table.append([f"P(C|C-trace, cut at {cut})",
+                          float(c_occurrence / total_occurrence)])
 
-printer("-"*50)
-for item in all_C_cut:
-    printer(item)
-    total_occurance = ((df["trace_arm"] == "c004") & (df["cut"] == item)).sum()
-    C_occurance = ((df["trace_arm"] == "c004") & (df["cut"] == item) & (df["letters"] == ("C",))).sum()
-    summary_table.append([f"P(C|C-trace and cut at {item}) = ", float(C_occurance/total_occurance)])
-    printer("C_occurance = ", C_occurance)
-    printer("total_occurance = ", total_occurance)
-    printer(f"P(C|C-trace and cut at {item}) = ", C_occurance/total_occurance)
+for cut in sorted(df.loc[df["trace_arm"] == "e036", "cut"].unique()):
+    mask = (df["trace_arm"] == "e036") & (df["cut"] == cut)
+    total_occurrence = mask.sum()
+    e_occurrence = (mask & (df["letters"] == ("E",))).sum()
+    printer("cut", cut, "E =", e_occurrence, "/", total_occurrence)
+    summary_table.append([f"P(E|E-trace, cut at {cut})",
+                          float(e_occurrence / total_occurrence)])
 
-printer("-"*50)
-for item in all_E_cut:
-    printer(item)
-    total_occurance = ((df["trace_arm"] == "e036") & (df["cut"] == item)).sum()
-    E_occurance = ((df["trace_arm"] == "e036") & (df["cut"] == item) & (df["letters"] == ("E",))).sum()
-    summary_table.append([f"P(E|E-trace and cut at {item}) = ", float(E_occurance/total_occurance)])
-    printer("x1 = ", E_occurance)
-    printer("total_occurance = ", total_occurance)
-    printer(f"P(E|E-trace and cut at {item}) = ", E_occurance/total_occurance)
+df_summary = pd.DataFrame(summary_table, columns=["quantity", "probability"])
+print(df_summary.to_string(index=False))
+df_summary.to_csv("probability_summary", index=False)
 
-printer("-"*50)
+# ---------------- plots ----------------
+CATEGORY_ORDER = ["C", "C,E", "E", "D,E", "B", "A", "None"]
+CATEGORY_COLOR = {"C": "#c0392b", "C,E": "#e67e22", "E": "#2980b9",
+                  "D,E": "#8e44ad", "B": "#f1c40f", "A": "#27ae60", "None": "#95a5a6"}
 
+def format_letters(x):
+    return "None" if len(x) == 0 else ",".join(x)
 
-df_summary = pd.DataFrame(summary_table)
-print(df_summary)
-df_summary.to_csv("probability_summary", index = False)
+if SHOW_PLOTS or SAVE_PLOTS:
+    dist = df_trace_cut.copy()
+    dist["letters"] = dist["letters"].apply(format_letters)
 
-
-if SHOW_PLOTS:
-    def format_letters(x):
-        if len(x) == 0:
-            return "None"
-        return ",".join(x)
-
-    df_trace_cut["letters"] = df_trace_cut["letters"].apply(format_letters)
-    def plot_bar_chart(trace_str):
-        plot_df = df_trace_cut[df_trace_cut["trace_arm"] == trace_str]
-        plot_df = (
-            plot_df
-            .pivot(index="cut", columns="letters", values="count")
-            .fillna(0)
-        )
-
-
-        # Plot
-        plot_df.plot(
-            kind="bar",
-            stacked=True,
-            width = 0.5
-        )
-
-        plt.title(trace_str)
-        plt.xlabel("Cut")
-        plt.ylabel("Count")
-        plt.legend(title="Letters")
+    def plot_bar_chart(trace_str, title, fname):
+        plot_df = (dist[dist["trace_arm"] == trace_str]
+                   .pivot(index="cut", columns="letters", values="count")
+                   .fillna(0))
+        cols = [c for c in CATEGORY_ORDER if c in plot_df.columns]
+        plot_df = plot_df[cols]
+        ax = plot_df.plot(kind="bar", stacked=True, width=0.65,
+                          color=[CATEGORY_COLOR[c] for c in cols],
+                          figsize=(8, 4.2), edgecolor="white", linewidth=0.5)
+        ax.set_title(title)
+        ax.set_xlabel("prefix ends after sentence k")
+        ax.set_ylabel("continuations (n = 25 per cut)")
+        ax.legend(title="final answer", bbox_to_anchor=(1.02, 1), loc="upper left")
+        ax.grid(axis="y", alpha=0.25)
+        ax.set_axisbelow(True)
         plt.tight_layout()
+        if SAVE_PLOTS:
+            plt.savefig(fname, dpi=200)
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close()
 
-        plt.show()
+    plot_bar_chart("c004", "C-trace (s0819_eval0multi0_004): answers by cut",
+                   "plot_cuts_c004.png")
+    plot_bar_chart("e036", "E-trace (s0819_eval0multi0_036): answers by cut",
+                   "plot_cuts_e036.png")
 
-    plot_bar_chart("c004")
-    plot_bar_chart("e036")
-
-    plot_df = df_trace_cut[df_trace_cut["trace_arm"] == "shared"]
-
-    pie_df = plot_df.groupby("letters")["count"].sum()
-
-
-
-
+    pie_df = (dist[dist["trace_arm"] == "shared"]
+              .groupby("letters")["count"].sum())
+    pie_df = pie_df.reindex([c for c in CATEGORY_ORDER if c in pie_df.index])
     total = pie_df.sum()
-
-    labels = [
-        f"{letter} ({value / total * 100:.0f}%)"
-        for letter, value in pie_df.items()
-    ]
-    pie_df.plot(
-        kind="pie",
-        labels=labels,
-        startangle=0,
-        labeldistance=0.50
-    )
-
-    plt.title("Shared")
-    plt.show()
+    labels = [f"{k}  {v}/{total} ({v/total*100:.0f}%)" for k, v in pie_df.items()]
+    fig, ax = plt.subplots(figsize=(5.2, 5.2))
+    ax.pie(pie_df, labels=labels, startangle=180, counterclock=False, labeldistance=0.75,
+           colors=[CATEGORY_COLOR[k] for k in pie_df.index],
+           wedgeprops=dict(edgecolor="white", linewidth=1))
+    ax.set_title("cut-0 (no prefix): baseline answer distribution, n = 25")
+    plt.tight_layout()
+    if SAVE_PLOTS:
+        plt.savefig("plot_cut0_pie.png", dpi=200)
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close()

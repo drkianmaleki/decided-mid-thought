@@ -92,3 +92,53 @@
 [22:50:58] ACCOUNT rs0823_c004_cut068: attempted=25 succeeded=25 err=0
 [22:50:58] ACCOUNT rs0823_c004_cut069: attempted=25 succeeded=25 err=0
 [22:50:58] DONE cost=$0.09; prefixes short of n=25: 0
+[22:57:08] CUT-0 GATE: P(E)=0.800 vs baseline 0.886 (±0.15) -> PASS  [{'E': 20, 'A': 1, 'C': 3, '?': 1}]
+[23:01:17] NOCLOSE rs0823_c004_cut015_001: finish=length len=55479
+[23:03:32] NOCLOSE rs0823_c004_cut015_005: finish=length len=54574
+[23:11:21] NOCLOSE rs0823_c004_cut015_012: finish=length len=54601
+[23:13:14] NOCLOSE rs0823_c004_cut015_015: finish=length len=57758
+[23:17:19] NOCLOSE rs0823_c004_cut015_018: finish=length len=55256
+[23:19:07] NOCLOSE rs0823_c004_cut015_019: finish=length len=57389
+[23:21:09] NOCLOSE rs0823_c004_cut015_021: finish=length len=55168
+[23:22:45] NOCLOSE rs0823_c004_cut015_022: finish=length len=53511
+[23:24:12] NOCLOSE rs0823_c004_cut015_023: finish=length len=61085
+[23:24:25] NOCLOSE rs0823_c004_cut015_024: finish=length len=57584
+[23:26:56] NOCLOSE rs0823_c004_cut029_000: finish=length len=56712
+[23:29:37] NOCLOSE rs0823_c004_cut029_002: finish=length len=55121
+[23:29:46] NOCLOSE rs0823_c004_cut029_003: finish=length len=54666
+[23:30:41] NOCLOSE rs0823_c004_cut029_004: finish=length len=56585
+[23:33:48] NOCLOSE rs0823_c004_cut029_006: finish=length len=54277
+[23:33:56] NOCLOSE rs0823_c004_cut029_007: finish=length len=56764
+[23:39:10] NOCLOSE rs0823_c004_cut029_011: finish=length len=54345
+[23:40:28] NOCLOSE rs0823_c004_cut029_013: finish=length len=57306
+[23:44:48] NOCLOSE rs0823_c004_cut029_014: finish=length len=57584
+[23:50:21] NOCLOSE rs0823_c004_cut029_021: finish=length len=55492
+[23:52:27] NOCLOSE rs0823_c004_cut029_023: finish=length len=55855
+[23:54:33] NOCLOSE rs0823_c004_cut044_001: finish=length len=55500
+[23:59:16] NOCLOSE rs0823_c004_cut044_007: finish=length len=57765
+[00:00:12] NOCLOSE rs0823_c004_cut044_009: finish=length len=57728
+[00:03:33] NOCLOSE rs0823_c004_cut044_011: finish=length len=57789
+[00:09:34] NOCLOSE rs0823_c004_cut044_020: finish=length len=61808
+[00:12:35] NOCLOSE rs0823_c004_cut044_023: finish=length len=56070
+[00:14:00] NOCLOSE rs0823_c004_cut044_024: finish=length len=53540
+[00:14:00] ACCOUNT rs0823_cut000: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut060: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut061: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut062: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut063: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut064: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_e036_cut065: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut015: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut029: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut044: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut058: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut059: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut060: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut061: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut062: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut063: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut064: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut067: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut068: attempted=25 succeeded=25 err=0
+[00:14:00] ACCOUNT rs0823_c004_cut069: attempted=25 succeeded=25 err=0
+[00:14:00] DONE cost=$3.13; prefixes short of n=25: 0
