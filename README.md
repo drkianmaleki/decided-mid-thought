@@ -1,9 +1,13 @@
 # decided-mid-thought
 
+**Write-up (MATS 12.0 submission): https://docs.google.com/document/d/16NsVaiIhVVeNqh0aBQ1OnvAvrGNd1HIZO-gY11OAR_s/edit?usp=sharing**
+
 **Where does a reasoning model commit to its answer?**
 Prefill-and-resample experiments on chain-of-thought traces from
 underspecified famous problems. Model under study: Qwen 3.6 27B (thinking)
-via OpenRouter, DeepInfra backend pinned.
+— sweep via OpenRouter (DeepInfra pinned, fallbacks disabled); resampling via
+DeepInfra's raw completions endpoint directly, because OpenRouter discards
+thinking-channel prefills.
 
 Given a mangled version of a famous puzzle — a bat-and-ball problem with one
 premise deleted — the model recalls the famous version in its chain of thought
@@ -13,8 +17,9 @@ resampling on the thinking trace, whether the answer is committed at an
 identifiable point mid-trace or is fixed from the first token (the
 pre-registered null).
 
-Pre-registration, scripts, and all raw runs are here. Findings are not yet
-final; the pre-registration was frozen before the resampling runs.
+Pre-registration, scripts, and all raw runs are here. Findings are final —
+see the write-up. The pre-registration was frozen before the resampling runs;
+verdicts and the analysis freeze are in `docs/log_2026-08-30.md`.
 
 ## Repository layout
 
@@ -30,8 +35,8 @@ final; the pre-registration was frozen before the resampling runs.
 
 - Python 3.12
 - `pip install -r requirements.txt`
-- Copy `.env.example` to `.env` and fill in `OpenRouter_API_KEY` and
-  `NEBIUS_API_KEY`.
+- Copy `.env.example` to `.env` and fill in `OpenRouter_API_KEY`,
+  `DEEPINFRA_API_KEY` (needed for the resampling runs), and `NEBIUS_API_KEY`.
 
 ## Reproduction
 
@@ -41,6 +46,17 @@ Main 2x2 sweep (eval-frame x selection-format, the 194-sample result in
 ```
 python scripts/sweep_2x2.py items/items_batball.csv -n 50
 ```
+
+Resampling (the 500-record causal result in `runs/`; DeepInfra direct):
+
+```
+python scripts/resample_cuts.py
+```
+
+(Cut set and per-run parameters are recorded in
+`runs/resample_cuts_2026-08-25_1503_log.txt` and the `_prefixes.json`
+sidecar; the recorded files, not the current script constants, are the
+authoritative record.)
 
 Single-item baselines:
 
@@ -60,7 +76,8 @@ python scripts/screen_items.py items/items_gpqa_physics_conceptual.json -n 12 --
 
 - **Model:** `qwen/qwen3.6-27b`, thinking enabled.
 - **Provider:** DeepInfra pinned, fallbacks disabled, for `sweep_2x2.py` and
-  `baseline_levels.py`. `screen_items.py` allows fallback to Nebius/Novita/Io
+  `baseline_levels.py`; `resample_cuts.py` calls DeepInfra's raw completions
+  endpoint directly (OpenRouter cannot prefill the thinking channel). `screen_items.py` allows fallback to Nebius/Novita/Io
   Net and is not used for the headline result.
 - **Sampling:** `temperature=1.0`. Results are inherently non-deterministic —
   exact counts will not reproduce, only the qualitative pattern.

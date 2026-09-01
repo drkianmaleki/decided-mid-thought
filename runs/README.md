@@ -15,6 +15,8 @@ rule for every file in this directory.
 | `batball_underspec_multi_baseline.jsonl` | `scripts/baseline_levels.py` (current version, schema matches) — script was edited after some of these samples were recorded: the single-item question text and the option menu (`OPTIONS`) have since changed. Per-record `prompt` is authoritative, not the current `QUESTION`/`OPTIONS` constants. | none (item hardcoded in script) | 61 | single condition, multi-select letters | 2026-08-19 |
 | `sweep_items_batball_2026-08-19_1620.jsonl` + `_summary.csv` | `scripts/sweep_2x2.py --smoke` | `items/items_batball.csv` | 1 per condition (4 total) | eval1_multi1, eval1_multi0, eval0_multi1, eval0_multi0 | 2026-08-19 16:20 — **smoke/aborted test run, not a headline result** |
 | `sweep_items_batball_2026-08-19_1623.jsonl` + `_summary.csv` | `scripts/sweep_2x2.py -n 50` | `items/items_batball.csv` | 50 per condition target (194 recorded: 50/50/50/44 — eval0_multi0 is 6 short) | eval1_multi1, eval1_multi0, eval0_multi1, eval0_multi0 | 2026-08-19 16:23–18:00 — **full sweep, main result** |
+| `sweep_items_batball_2026-08-19_1623_ids.csv` | `scripts/make_id_sidecar.py` | — | 194 rows | stable per-record IDs (`s0819_<cell>_<nnn>`) for the full sweep, used by hand-check and reading-pack tooling | 2026-08-25 |
+| `sweep_items_batball_2026-08-19_1623_rescored.jsonl` | `scripts/rescore_letters.py` (scoring revision v2.1) | — | 194 | same records as the full sweep; only the `letters` field re-derived, traces byte-identical (verified). Zero records changed in this file. **Canonical for all sweep numbers.** | 2026-08-29 |
 | `items_gpqa_physics_conceptual_raw.jsonl` + `_summary.csv` + `_log.txt` | `scripts/screen_items.py` (defaults: n=12, phase=2, lo=0.30, hi=0.90) | `items/items_gpqa_physics_conceptual.json` | 12 per item x 23 items = 276 | baseline only — every item's baseline P(correct) was 1.0, outside [0.30, 0.90], so 0 items qualified for phase 2 cue conditions | 2026-08-17 23:51 – 2026-08-18 03:16 |
 
 **Sweep note:** the `eval0_multi0` cell in the full sweep contains 44
@@ -96,3 +98,26 @@ resample_cuts_2026-08-25_1440_prefixes.json  aborted v2 smoke: T=0 mechanism che
 resample_cuts_2026-08-25_1457.*  passing v2 smoke on DeepInfra direct, 3 eye-check records, seq=900.
                                  Not used in any analysis.
 resample_cuts_2026-08-25_1503.*  THE analysis run: 20 prefixes x 25 = 500 records; gate, log, summary.
+resample_cuts_2026-08-25_1503_rescored.jsonl  the 500 records re-scored by the v2.1 extractor
+                                 (`scripts/rescore_letters.py`); only `letters` re-derived, `cont_text`
+                                 byte-identical. 35 records changed, each human-validated.
+                                 **Canonical for all per-cut numbers.**
+
+### Resample record fields (`resample_cuts_*_1503*.jsonl`)
+
+`id` (stable record id, `rs0823_<prefix>_<nnn>`), `prefix_id`, `trace_arm`
+(`c004` / `e036` / `shared` for cut-0), `cut` (sentence index the prefix ends
+at), `sample`, `letters` (parsed answer letters), `think_closed` (whether the
+continuation ever emitted `</think>`), `cont_len` (chars), `cont_text` (the
+full continuation), plus request metadata (`prompt`, `finish`, `usage`).
+
+### Scoring revision v2.1 (2026-08-29)
+
+The pre-registration permitted exactly one revision of the answer extractor.
+A seeded, blinded hand-check (20 records, agreement 19/20) triggered it; the
+revised extractor was applied programmatically to all records of both main
+files, and each of the 35 records whose score changed was validated by eye.
+Raw model text was never edited. Provenance:
+`docs/rescore_change_list_v21.csv` (the 35 flips) and
+`docs/rescore_validation_sheet_v21.pdf` (the blinded sheet). The `_rescored`
+files are canonical; the originals are retained unmodified for the record.

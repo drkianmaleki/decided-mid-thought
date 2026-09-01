@@ -16,17 +16,21 @@ Conventions:
 Outputs (repo root):
   baseline_summary        — pooled letters distribution over all 194 records
   baseline_cells_summary  — per-cell counts + derived registered quantities
+  plot_baseline_cells.png — four pies, one per 2x2 cell (if SAVE_PLOTS)
 """
 import pandas as pd
+import matplotlib.pyplot as plt
 
 TARGET_KEYS = ["condition", "letters", "sample"]
 PRINT_Q = True
+SHOW_PLOTS = False      # interactive windows
+SAVE_PLOTS = True       # write PNG next to the summaries
 
 def printer(*item):
     if PRINT_Q:
         print(*item)
 
-df_raw = pd.read_json("runs/sweep_items_batball_2026-08-19_1623.jsonl", lines=True)
+df_raw = pd.read_json("runs/sweep_items_batball_2026-08-19_1623_rescored.jsonl", lines=True)
 df = df_raw[df_raw.columns.intersection(TARGET_KEYS)].copy()
 df["letters"] = df["letters"].apply(tuple)
 
@@ -79,3 +83,44 @@ baseline_summary = pd.DataFrame(
     columns=["letters", "probability"])
 print(baseline_summary.to_csv(index=False))
 baseline_summary.to_csv("baseline_summary", index=False)
+
+# ---------------- per-cell pie charts (2x2, the elicitation picture) ----------------
+# Same category order/colors as analysis_cuts.py so all figures read alike.
+CATEGORY_ORDER = ["C", "A,C", "C,E", "E", "D,E", "B", "A", "F", "None"]
+CATEGORY_COLOR = {"C": "#c0392b", "A,C": "#e74c3c", "C,E": "#e67e22", "E": "#2980b9",
+                  "D,E": "#8e44ad", "B": "#f1c40f", "A": "#27ae60", "F": "#16a085",
+                  "None": "#95a5a6"}
+DEFAULT_COLOR = "#34495e"
+
+def format_letters(x):
+    return "None" if len(x) == 0 else ",".join(x)
+
+if SHOW_PLOTS or SAVE_PLOTS:
+    CELL_POS = {"eval0_multi0": (0, 0), "eval0_multi1": (0, 1),
+                "eval1_multi0": (1, 0), "eval1_multi1": (1, 1)}
+    CELL_TITLE = {"eval0_multi0": "no eval sentence, single-select",
+                  "eval0_multi1": "no eval sentence, multi-select",
+                  "eval1_multi0": "eval sentence, single-select",
+                  "eval1_multi1": "eval sentence, multi-select"}
+    fig, axes = plt.subplots(2, 2, figsize=(9.2, 9.2))
+    for cond, g in df.groupby("condition"):
+        counts = g["letters"].apply(format_letters).value_counts()
+        order = [c for c in CATEGORY_ORDER if c in counts.index]
+        order += [c for c in counts.index if c not in order]   # never drop a category
+        counts = counts.reindex(order)
+        n = int(counts.sum())
+        ax = axes[CELL_POS[cond]]
+        labels = [f"{k}  {v}/{n} ({v/n*100:.0f}%)" for k, v in counts.items()]
+        ax.pie(counts, labels=labels, startangle=180, counterclock=False,
+               labeldistance=0.72, textprops={"fontsize": 8.5},
+               colors=[CATEGORY_COLOR.get(k, DEFAULT_COLOR) for k in counts.index],
+               wedgeprops=dict(edgecolor="white", linewidth=1))
+        ax.set_title(f"{CELL_TITLE[cond]}  (n = {n})", fontsize=10)
+    fig.suptitle("Sweep 2x2: answer distribution per prompt variant (rescored letters)\n"
+                 "Same underlying question, four elicitation formats", fontsize=11.5)
+    plt.tight_layout(rect=[0, 0, 1, 0.94])
+    if SAVE_PLOTS:
+        plt.savefig("plot_baseline_cells.png", dpi=200)
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close()
